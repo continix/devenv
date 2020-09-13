@@ -51,12 +51,12 @@ services:
   plan:
     extends:
       service: terraform
-    command: ["terraform", "plan", "-var", "-no-color", "-out=plan.out"]
+    command: ["terraform", "plan", "-no-color", "-out=plan.out"]
 
   apply:
     extends:
       service: terraform
-    command: ["terraform", "apply", "-var", "-auto-approve"]
+    command: ["terraform", "apply", "-auto-approve"]
   
   destroy:
     extends:
