@@ -18,6 +18,9 @@ plan: get
 apply: plan
 	@docker-compose run --rm apply
 
+output: apply
+	@docker-compose run --rm output
+
 destroy: init
 	@docker-compose run --rm destroy
 
