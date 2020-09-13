@@ -1,0 +1,11 @@
+version: "2.1"
+
+services:
+  shell:
+    image: continixlabs/devenv:1.0
+    volumes:
+      - ./:/src
+      - ~/.aws:/root/.aws
+    
+    working_dir: /src
+    command: ["/bin/ash"]
