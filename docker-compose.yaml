@@ -1,11 +1,69 @@
 version: "2.1"
 
 services:
-  shell:
+  terraform:
     image: continixlabs/devenv:1.0
     volumes:
       - ./:/src
       - ~/.aws:/root/.aws
+    environment:
+      #- TF_LOG=TRACE
+      - AWS_PROFILE=continix_dev
     
     working_dir: /src
     command: ["/bin/ash"]
+
+  showaws:
+    extends: 
+      service: terraform
+    command: ["aws", "configure", "list"]
+  
+  get:
+    extends:
+      service: terraform
+    command: ["terraform", "get", "-update=true"]
+  
+  init:
+    extends:
+      service: terraform
+    command: ["terraform", "get", "-force-copy"]
+  
+  fmt:
+    extends:
+      service: terraform
+    command: ["terraform", "fmt"]
+  
+  pwd:
+    extends:
+      service: terraform
+    command: ["pwd"]
+  
+  ls:
+    extends:
+      service: terraform
+    command: ["ls"]
+  
+  env:
+    extends:
+      service: terraform
+    command: ["env"]
+
+  plan:
+    extends:
+      service: terraform
+    command: ["terraform", "plan", "-var", "-no-color", "-out=plan.out"]
+
+  apply:
+    extends:
+      service: terraform
+    command: ["terraform", "apply", "-var", "-auto-approve"]
+  
+  destroy:
+    extends:
+      service: terraform
+    command: ["terraform", "destroy"]
+  
+  output:
+    extends:
+      service: terraform
+    command: ["terraform", "output"]

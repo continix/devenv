@@ -1,12 +1,25 @@
-SHELL := /bin/bash
-
-RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
-$(eval $(RUN_ARGS):;@:)
-
-.PHONY: all clean init plan apply
-
-clean:
-	rm -rf .build/*.tgz
+.PHONY: init plan apply
 
 shell:
 	@docker-compose run --rm shell
+
+fmt:
+	@docker-compose run --rm fmt
+
+init: cleanNetwork
+	@docker-compose run --rm init
+
+get: init
+	@docker-compose run --rm get
+
+plan: get
+	@docker-compose run --rm plan
+
+apply: plan
+	@docker-compose run --rm apply
+
+destroy: init
+	@docker-compose run --rm destroy
+
+cleanNetwork:
+	@docker network prune -f
