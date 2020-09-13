@@ -1,7 +1,7 @@
 .PHONY: init plan apply
 
 shell:
-	@docker-compose run --rm shell
+	@docker-compose run --rm terraform bash
 
 fmt:
 	@docker-compose run --rm fmt
