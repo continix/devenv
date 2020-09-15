@@ -1,13 +1,15 @@
 version: "2.1"
 
 services:
-  terraform:
-    image: continixlabs/devenv:1.0
+  continix:
+    image: continixlabs/devenv:1.1
     volumes:
       - ./:/src
       - ~/.aws:/root/.aws
     environment:
-      #- TF_LOG=TRACE
+      # - TF_LOG=TRACE
+      # - PACKER_LOG=1 
+      # - PACKER_LOG_PATH=packer.log
       - AWS_PROFILE=continix_dev
     
     working_dir: /src
@@ -15,55 +17,95 @@ services:
 
   showaws:
     extends: 
-      service: terraform
+      service: continix
     command: ["aws", "configure", "list"]
   
   get:
     extends:
-      service: terraform
+      service: continix
     command: ["terraform", "get", "-update=true"]
   
   init:
     extends:
-      service: terraform
+      service: continix
     command: ["terraform", "init", "-force-copy"]
   
   fmt:
     extends:
-      service: terraform
+      service: continix
     command: ["terraform", "fmt"]
   
   pwd:
     extends:
-      service: terraform
+      service: continix
     command: ["pwd"]
   
   ls:
     extends:
-      service: terraform
+      service: continix
     command: ["ls"]
   
   env:
     extends:
-      service: terraform
+      service: continix
     command: ["env"]
 
   plan:
     extends:
-      service: terraform
+      service: continix
     command: ["terraform", "plan", "-no-color", "-out=plan.out"]
 
   apply:
     extends:
-      service: terraform
+      service: continix
     command: ["terraform", "apply", "-auto-approve"]
   
   destroy:
     extends:
-      service: terraform
+      service: continix
     command: ["terraform", "destroy"]
   
   output:
     extends:
-      service: terraform
+      service: continix
     command: ["terraform", "output"]
+  
+  tfhelp:
+    extends:
+      service: continix
+    command: ["terraform", "--help"]
+  
+  phelp:
+    extends:
+      service: continix
+    command: ["packer", "--help"]
+
+  validate:
+    extends:
+      service: continix
+    command: ["packer", "validate"]
+
+  build:
+    extends:
+      service: continix
+    command: ["packer", "build", "-color=false"]
+
+  inspect:
+    extends:
+      service: continix
+    command: ["packer", "inspect"]
+
+  console:
+    extends:
+      service: continix
+    command: ["packer", "console"]
+
+  fix:
+    extends:
+      service: continix
+    command: ["packer", "fix"]
+
+  hcl2_upgrade:
+    extends:
+      service: continix
+    command: ["packer", "hcl2_upgrade"]
