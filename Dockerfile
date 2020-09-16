@@ -1,4 +1,4 @@
-FROM alpine
+FROM ruby:alpine
 LABEL maintainer "CONTINIX DevOps <devops@continix.com>"
 
 # Env setup
@@ -11,7 +11,7 @@ ENV TERRAFORM_VERSION=0.13.2 \
 ENV TERRAFORM_ZIPFILE=terraform_${TERRAFORM_VERSION}_${OSNAME}_${OSARCH}.zip \
     PACKER_ZIPFILE=packer_${PACKER_VERSION}_${OSNAME}_${OSARCH}.zip
 
-RUN apk --update --no-cache add libc6-compat git openssh-client py-pip python3 curl ansible && pip install awscli
+RUN apk --update --no-cache add libc6-compat git openssh-client py-pip python3 curl ansible alpine-sdk && pip install awscli
 
 # Installing terraform and packer in path
 RUN cd ${DEST} && \
@@ -19,3 +19,10 @@ RUN cd ${DEST} && \
     curl https://releases.hashicorp.com/packer/${PACKER_VERSION}/${PACKER_ZIPFILE} -o ${PACKER_ZIPFILE} && \
     unzip ${TERRAFORM_ZIPFILE} && unzip ${PACKER_ZIPFILE} && \
     rm ${TERRAFORM_ZIPFILE} ${PACKER_ZIPFILE}
+
+COPY Gemfile /code/Gemfile
+
+RUN cd /code && bundle install
+
+WORKDIR /src
+
