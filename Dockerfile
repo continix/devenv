@@ -26,6 +26,9 @@ RUN cd ${DEST} && \
     curl -Lo ./terraform-docs https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-v0.10.1-$(uname | tr '[:upper:]' '[:lower:]')-amd64 && \
     chmod +x ./terraform-docs 
 
+# Installing serverless
+RUN apk --update add npm && npm install -g serverless
+
 COPY Gemfile /code/Gemfile
 
 RUN cd /code && bundle install
